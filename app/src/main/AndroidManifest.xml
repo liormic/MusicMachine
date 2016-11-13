@@ -17,6 +17,9 @@
         </activity>
        <service android:name=".DownloadService"/>
        <service android:name=".DownloadIntentService"/>
+       <service android:name=".DownloadIntentService"/>
+       <service android:name=".PlayerService"/>
+
 
 
     </application>
