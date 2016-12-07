@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String KEY_SONG ="song" ;
     private boolean mBound =false;
     private  MainActivity mMainActivity;
-
+    private Messenger mActivityMessenger= new Messenger(new ActivityHandler(this));
     private Button mDownloadButton;
     private Button mPlayButton;
     private Messenger mServiceMessabger;
@@ -38,7 +39,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mBound = false;
-
+            mServiceMessabger= new Messenger(binder);
+            Message message =Message.obtain();
+            message.arg1=2;
+            message.arg2=1;
+            message.replyTo=mActivityMessenger;
+            try {
+                mServiceMessabger.send(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
 
     };
@@ -72,13 +82,21 @@ public class MainActivity extends AppCompatActivity {
         if(mBound){
 Intent intent=new Intent(MainActivity.this,PlayerService.class);
 startService(intent);
+        Message message =Message.obtain();
+        message.arg1=2;
+        message.replyTo=mActivityMessenger;
+        try {
+        mServiceMessabger.send(message);
+        } catch (RemoteException e) {
+        e.printStackTrace();
+        }
 
         }
         }
         });
     }
 
-    public  void changePlayButtonText(String text){
+    public void changePlayButtonText(String text){
         mPlayButton.setText(text);
     }
 

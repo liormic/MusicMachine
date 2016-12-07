@@ -4,6 +4,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
 
+import static android.R.id.message;
+
 /**
  * Created by Liorm on 12/5/2016.
  */
@@ -17,6 +19,9 @@ public class ActivityHandler extends Handler {
     public void handleMessage(Message msg) {
         if (msg.arg1 == 0) {
             //Music is NOT playing
+            if(msg.arg2==1){
+                mMainActivity.changePlayButtonText("Play");
+            }else
             //Play the music
             Message message =Message.obtain();
             message.arg1 = 0;

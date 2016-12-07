@@ -1,5 +1,6 @@
 package googlepalyservices.samples.adnroid.threehose.com.musicmachine;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -32,12 +33,17 @@ public class PlayerService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-      mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        Notification.Builder notficationBuilder = new Notification.Builder(this);
+        notficationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        Notification notification = notficationBuilder.build();
+        startForeground(11,notification);
+        mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
           @Override
           public void onCompletion(MediaPlayer mp) {
               stopSelf();
           }
       });
+        stopForeground(true);
         return Service.START_NOT_STICKY;
     }
 
